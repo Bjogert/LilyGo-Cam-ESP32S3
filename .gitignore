@@ -3,3 +3,19 @@
 script
 build
 secrets.h
+
+# Additional security files
+*.pem
+*.key
+*.crt
+config.json
+local_config.h
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# IDE specific
+*.swp
+*.swo
+*~
