@@ -44,13 +44,13 @@ bool setupCamera()
     config.pin_sscb_scl = SIOC_GPIO_NUM;
     config.pin_pwdn = PWDN_GPIO_NUM;
     config.pin_reset = RESET_GPIO_NUM;
-    config.xclk_freq_hz = 10000000; // Reduce from 20MHz to 10MHz for stability
-    config.frame_size = FRAMESIZE_SVGA; // Start with smaller frame size
+    config.xclk_freq_hz = 20000000; // Restore to 20MHz for better performance
+    config.frame_size = FRAMESIZE_VGA; // Use VGA for better compatibility
     config.pixel_format = PIXFORMAT_JPEG; // for streaming
     //config.pixel_format = PIXFORMAT_RGB565; // for face detection/recognition
     config.grab_mode = CAMERA_GRAB_LATEST; // Use latest frame instead of when empty
     config.fb_location = CAMERA_FB_IN_PSRAM;
-    config.jpeg_quality = 15; // Increase quality number (lower quality) for faster processing
+    config.jpeg_quality = 12; // Balance between quality and performance
     config.fb_count = 2; // Use double buffering
 
     // if PSRAM IC present, init with UXGA resolution and higher JPEG quality
@@ -90,7 +90,7 @@ bool setupCamera()
     }
     // drop down frame size for higher initial frame rate
     if (config.pixel_format == PIXFORMAT_JPEG) {
-        s->set_framesize(s, FRAMESIZE_QVGA);
+        s->set_framesize(s, FRAMESIZE_VGA); // Keep VGA for better quality
     }
 
 #if defined(LILYGO_ESP32S3_CAM_PIR_VOICE)
@@ -102,7 +102,7 @@ bool setupCamera()
     }
 #endif
 
-    frameSize = FRAMESIZE_QVGA;
+    frameSize = FRAMESIZE_VGA; // Match the actual frame size
 
     return true;
 }
