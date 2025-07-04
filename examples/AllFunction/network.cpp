@@ -119,6 +119,10 @@ void setupNetwork(bool setup_AP_Mode)
         Serial.println("WiFi connected");
         Serial.println("IP address: ");
         Serial.println(WiFi.localIP());
+        
+        // Disable WiFi power saving to prevent timing issues with camera streaming
+        WiFi.setSleep(false);
+        Serial.println("WiFi power saving disabled");
     }
 }
 

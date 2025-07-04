@@ -15,7 +15,7 @@
 
 
 // Set this to true if using AP mode
-#define USING_AP_MODE       true
+#define USING_AP_MODE       false
 
 
 // ===================

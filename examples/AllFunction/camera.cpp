@@ -44,14 +44,14 @@ bool setupCamera()
     config.pin_sscb_scl = SIOC_GPIO_NUM;
     config.pin_pwdn = PWDN_GPIO_NUM;
     config.pin_reset = RESET_GPIO_NUM;
-    config.xclk_freq_hz = 20000000;
-    config.frame_size = FRAMESIZE_UXGA;
+    config.xclk_freq_hz = 10000000; // Reduce from 20MHz to 10MHz for stability
+    config.frame_size = FRAMESIZE_SVGA; // Start with smaller frame size
     config.pixel_format = PIXFORMAT_JPEG; // for streaming
     //config.pixel_format = PIXFORMAT_RGB565; // for face detection/recognition
-    config.grab_mode = CAMERA_GRAB_WHEN_EMPTY;
+    config.grab_mode = CAMERA_GRAB_LATEST; // Use latest frame instead of when empty
     config.fb_location = CAMERA_FB_IN_PSRAM;
-    config.jpeg_quality = 12;
-    config.fb_count = 1;
+    config.jpeg_quality = 15; // Increase quality number (lower quality) for faster processing
+    config.fb_count = 2; // Use double buffering
 
     // if PSRAM IC present, init with UXGA resolution and higher JPEG quality
     //                      for larger pre-allocated frame buffer.

@@ -14,6 +14,7 @@
 #include "network.h"
 #include "server.h"
 #include "utilities.h"
+#include "esp_task_wdt.h" // Add watchdog timer header
 #include "esp_camera.h"
 
 void startCameraServer();
@@ -114,6 +115,10 @@ void setup()
     // Custom Transport Server
     setupServer();
 
+    // Initialize task watchdog (30 second timeout)
+    esp_task_wdt_init(30, true);
+    esp_task_wdt_add(NULL);
+
     /*
     * espressif official example, using asynchronous streaming, unstable, not recommended
     * */
@@ -128,7 +133,13 @@ void setup()
 
 void loop()
 {
+    // Reset watchdog timer
+    esp_task_wdt_reset();
+    
     loopServer();
+    
+    // Small delay to prevent tight loop
+    delay(1);
 }
 
 

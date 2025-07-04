@@ -23,7 +23,7 @@ XPowersPMU  PMU;
 WiFiMulti   wifiMulti;
 String      hostName = "LilyGo-Cam-";
 String      ipAddress = "";
-bool        use_ap_mode = true;
+bool        use_ap_mode = false;
 
 
 
@@ -80,8 +80,13 @@ void setup()
     } else {
 
         wifiMulti.addAP(WIFI_SSID1, WIFI_SSID_PASSWORD1);
-        wifiMulti.addAP(WIFI_SSID2, WIFI_SSID_PASSWORD1);
-        wifiMulti.addAP(WIFI_SSID3, WIFI_SSID_PASSWORD1);
+        // Only add additional networks if they are not empty
+        if (strlen(WIFI_SSID2) > 0) {
+            wifiMulti.addAP(WIFI_SSID2, WIFI_SSID_PASSWORD2);
+        }
+        if (strlen(WIFI_SSID3) > 0) {
+            wifiMulti.addAP(WIFI_SSID3, WIFI_SSID_PASSWORD3);
+        }
         
         Serial.println("Connecting Wifi...");
         if (wifiMulti.run() == WL_CONNECTED) {
@@ -117,13 +122,13 @@ void setup()
     config.pin_pwdn = PWDN_GPIO_NUM;
     config.pin_reset = RESET_GPIO_NUM;
     config.xclk_freq_hz = 20000000;
-    config.frame_size = FRAMESIZE_UXGA;
+    config.frame_size = FRAMESIZE_SVGA;  // Smaller frame size for better streaming
     config.pixel_format = PIXFORMAT_JPEG; // for streaming
     //config.pixel_format = PIXFORMAT_RGB565; // for face detection/recognition
-    config.grab_mode = CAMERA_GRAB_WHEN_EMPTY;
+    config.grab_mode = CAMERA_GRAB_LATEST;  // Use latest frame for smoother streaming
     config.fb_location = CAMERA_FB_IN_PSRAM;
-    config.jpeg_quality = 12;
-    config.fb_count = 1;
+    config.jpeg_quality = 15;  // Lower quality for better performance
+    config.fb_count = 2;  // Double buffering
 
     // if PSRAM IC present, init with UXGA resolution and higher JPEG quality
     //                      for larger pre-allocated frame buffer.
@@ -164,7 +169,7 @@ void setup()
     }
     // drop down frame size for higher initial frame rate
     if (config.pixel_format == PIXFORMAT_JPEG) {
-        s->set_framesize(s, FRAMESIZE_QVGA);
+        s->set_framesize(s, FRAMESIZE_VGA);  // Better balance of quality/performance
     }
 
 #if defined(LILYGO_ESP32S3_CAM_PIR_VOICE)
